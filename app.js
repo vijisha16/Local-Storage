@@ -2,11 +2,15 @@
 let btnSubmit = document.getElementById('btnSubmit');
 let btnReset = document.getElementById('btnReset');
 
+let username = document.getElementById('txtName').value;
+let emailId = document.getElementById('txtEmail').value;
+let phonenumber = document.getElementById('txtPhone').value;
+
 const listDisplay = document.getElementById('displayList');
 
-btnSubmit.addEventListener('click', onSubmit);
+// btnSubmit.addEventListener('click', formData);
 
-function onSubmit() {
+function formData() {
     
     let txtName1 = document.getElementById('txtName').value;
     let txtEmail1 = document.getElementById('txtEmail').value;
@@ -20,7 +24,7 @@ function onSubmit() {
 
     //  Convert the textbox values to strings
     let objSerialized = JSON.stringify(myObj);
-    localStorage.setItem(myObj.name , objSerialized);
+    // localStorage.setItem(myObj.name , objSerialized);
 
     // Delete single list item
     const deleteBtn = document.createElement('input');
@@ -63,37 +67,54 @@ function onSubmit() {
     listItem.appendChild(editBtn);
 
     txtPhone.value = "";
+
+    function showNewUserOnScreen(event) {
+      event.preventDefault();
+      const name=event.target.username.value;
+      const email=event.target.emailId.value;
+      const phonenumber=event.target.phonenumber.value;
+    
+      const obj = {
+        name,
+        email,
+        phonenumber
+      }
+    
+      axios.post("https://crudcrud.com/api/554c743ebb5f456d85ac8b0a33ad1626/appointmentData", obj)
+      .then((respone) => {
+        showNewUserOnScreen(respone.data)
+        console.log(respone);
+      })
+      .catch((err)=> {
+        console.log(err)
+    })
+      localStorage.setItem(obj.email, JSON.stringify(obj))
+      showNewUserOnScreen(obj)       
+    
+    windo9w.addEventListener("DOMContentLoaded", () => {
+      axios.get("https://crudcrud.com/api/554c743ebb5f456d85ac8b0a33ad1626/appointmentData")
+          .then((response)=>{
+            console.log(response)
+            for (var i = 0; i < response.data.length; i++) {
+              showNewUserOnScreen(response.data[i])
+            }
+          })
+          .catch((error)=>{
+            console.log(error);
+          })
+    })
+    
+    }
 }
 
 
-function saveToLocalStorage(event) {
-  event.preventDefault();
-  const name=event.target.username.value;
-  const email=event.target.emailId.value;
-  const phonenumber=event.target.phonenumber.value;
 
-  const obj = {
-    name,
-    email,
-    phonenumber
-  }
-
-  axios.post("https://crudcrud.com/api/0f1cd3a37ec345f6ba88ef8c4337075b/axios", )
-  .then((respone) => {
-    console.log(respone);
-  })
-  .catch((err)=> {
-    console.log(err)
-})
-  localStorage.setItem(obj.email, JSON.stringify(obj))
-  showNewUserOnScreen(obj)       
-}
 
 
        
 // Reset all textboxes
-btnReset.addEventListener('click', (e)=>{
-    txtName.value = "";
-    txtEmail.value = "";
-    txtPhone.value = "";
-});
+// btnReset.addEventListener('click', (e)=>{
+//     txtName.value = "";
+//     txtEmail.value = "";
+//     txtPhone.value = "";
+// });
